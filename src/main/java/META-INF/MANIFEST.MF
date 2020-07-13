@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.zjw.main.Main
+Class-Path: gson-2.8.6.jar junit-4.10.jar hamcrest-core-1.1.jar
+
