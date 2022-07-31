@@ -5,6 +5,8 @@ import com.zjw.domain.BiliBili;
 import com.zjw.domain.BiliBiliJLP;
 import com.zjw.domain.BiliBiliSingle;
 
+import java.util.HashMap;
+
 public class BiBiUtils {
 
     private static Gson gson;
@@ -13,7 +15,12 @@ public class BiBiUtils {
     }
 
     public static String getVideoName(String fileJson){
-        BiliBili bili = gson.fromJson(fileJson, BiliBili.class);
+        BiliBili bili = null;
+        try {
+            bili = gson.fromJson(fileJson, BiliBili.class);
+        }catch (Exception e){
+            return "合并";
+        }
         //根据文件名，获取输出文件的路径
         String name = null;
         try{
@@ -65,4 +72,5 @@ public class BiBiUtils {
 
         return page;
     }
+    
 }

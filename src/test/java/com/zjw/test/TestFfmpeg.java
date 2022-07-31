@@ -1,36 +1,51 @@
-package com.zjw.main;
+package com.zjw.test;
 
 import com.google.gson.Gson;
-import com.zjw.gson.LinuxBean;
+import com.zjw.domain.BiliBili;
 import com.zjw.utils.BiBiUtils;
+import org.junit.Test;
 
 import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
-public class Main {
+/**
+ *
+ * bilibili手机视频缓存导出mp4
+ *
+ * bilibili默认缓存路径 \Android\data\tv.danmaku.bili\download
+ *
+ */
+public class TestFfmpeg {
     // FFmpeg全路径
     private static final String FFMPEG_PATH = "D:\\ffmpeg\\bin\\ffmpeg.exe";
     //音视频文件的位置
 //    private static final String IN_PATH = "F:\\电影\\s_2546";
-    private static String IN_PATH = "F:\\教程\\54095344";
+    private static String IN_PATH = "I:\\回形针\\未解析";
     //输出文件的位置
 //    private static final String OUT_PATH = "F:\\电影\\";
-    private static String OUT_PATH = "F:\\教程\\韩顺平数据结构\\";
+    private static String OUT_PATH = "I:\\回形针\\";
 
 
 
-    public static void main(String[] args) throws Exception {
-
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("请输入要解析的文件夹（如：F:\\电影\\s_2546）");
+        IN_PATH = sc.nextLine();
+        System.out.println("请输入视频生成文件夹（如：F:\\电影\\）");
+        OUT_PATH = sc.nextLine();
 
         File file = new File(OUT_PATH);
         if (!file.exists()){
             file.mkdirs();
         }
         try {
-            getAll(IN_PATH,OUT_PATH);
+        getAll(IN_PATH,OUT_PATH);
         } catch (Exception e) {
             e.printStackTrace();
         }
