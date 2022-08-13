@@ -10,21 +10,36 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * @author 朱俊伟
+ */
 public class Main {
-    // FFmpeg全路径
-    private static final String FFMPEG_PATH = "D:\\ffmpeg\\bin\\ffmpeg.exe";
-    //音视频文件的位置
-//    private static final String IN_PATH = "F:\\电影\\s_2546";
-    private static String IN_PATH = "F:\\教程\\54095344";
-    //输出文件的位置
-//    private static final String OUT_PATH = "F:\\电影\\";
-    private static String OUT_PATH = "F:\\教程\\韩顺平数据结构\\";
 
+    /**
+     * FFmpeg全路径
+     */
+    private static final String FFMPEG_PATH = "D:/ffmpeg\\bin/ffmpeg.exe";
+    /**
+     * 音视频文件的位置
+     */
+    private static final String IN_PATH = "F:/631171397";
+    /**
+     * 输出文件的位置
+     */
+    private static final String OUT_PATH = "F:/教程/RabbitMQ/";
+    /**
+     * 数字前缀
+     */
+    private static final boolean PREFIX_NUM = false;
 
+    /**
+     * 合并文件计数
+     */
+    public static int count = 0;
 
     public static void main(String[] args) throws Exception {
 
-
+        Long startTime = System.currentTimeMillis();
         File file = new File(OUT_PATH);
         if (!file.exists()){
             file.mkdirs();
@@ -34,6 +49,8 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Long endTime = System.currentTimeMillis();
+        System.out.println("转换完成，共计耗时:"+(endTime-startTime)/1000+"秒,转换文件:"+count+"个");
     }
     /**
      * 具体合成视频函数
@@ -87,45 +104,33 @@ public class Main {
             if (errorStream != null) {
                 errorStream.close();
             }
-            outPutFile2.renameTo(new File(outParentFilePath+"\\"+finalName));
+            outPutFile2.renameTo(new File(outParentFilePath+"/"+finalName));
         }
     }
     // 递归函数
-    public static void getAll(String in_path,String out_path) throws Exception {
+    public static void getAll(String inPath,String outPath) throws Exception {
         String videoInputPath = "";
         String audioInputPath = "";
         String videoOutPath = "";
 
-        File file = new File(in_path);
+        File file = new File(inPath);
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                getAll(f.getPath(),out_path);
+                getAll(f.getPath(),outPath);
                 if (f.isFile()) {
 
-                    if (f.getName().endsWith(".m4s")) {
-
-                        if (f.getName().endsWith("audio.m4s"))
-                            audioInputPath = file.getPath() + "\\audio.m4s";
-                        if (f.getName().endsWith("video.m4s"))
-                            videoInputPath = file.getPath() + "\\video.m4s";
-//                        videoOutPath = file.getPath() + "\\all.mp4";
-                        videoOutPath = out_path;
-
+                    if (f.getName().endsWith("audio.m4s")) {
+                        audioInputPath = file.getPath() + "/audio.m4s";
+                        videoInputPath = file.getPath() + "/video.m4s";
                         //获取输出的文件名
-                        BufferedReader br = new BufferedReader(new FileReader(new File(file.getParentFile().getPath()+"\\entry.json")));
+                        BufferedReader br = new BufferedReader(new FileReader(new File(file.getParentFile().getPath()+"/entry.json")));
                         String fileJson=br.readLine();
                         br.close();
-
-                        //加数字前缀
-//                        String fileName = fill(BiBiUtils.getVideoIndex(fileJson),3,3)+"_"+BiBiUtils.getVideoName(fileJson)+".mp4";
-                        //不加前缀
-                        String fileName = BiBiUtils.getVideoName(fileJson)+".mp4";
-                        videoOutPath = videoOutPath+fileName;
-
-                        if (!videoInputPath.equals(""))
-                            convetor(videoInputPath, audioInputPath, videoOutPath);
-
+                        //输出文件路径+文件名
+                        videoOutPath = outPath+getFileName(fileJson);
+                        System.out.printf("正在合并第%s个视频...\n", ++count);
+                        convetor(videoInputPath, audioInputPath, videoOutPath);
                     }
 
                 }
@@ -135,7 +140,15 @@ public class Main {
         }
     }
 
-
+    public static String getFileName(String fileJson){
+        String fileName = "video.mp4";
+        if (PREFIX_NUM){
+            fileName = fill(BiBiUtils.getVideoIndex(fileJson),3,3)+"_"+BiBiUtils.getVideoName(fileJson)+".mp4";
+        } else {
+            fileName = BiBiUtils.getVideoName(fileJson)+".mp4";
+        }
+        return fileName;
+    }
 
     public static String fill(int num , int min , int max) {
         NumberFormat numberFormat = NumberFormat.getInstance();
