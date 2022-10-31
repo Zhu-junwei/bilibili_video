@@ -1,7 +1,7 @@
 package com.zjw.main;
 
 import com.zjw.utils.BiBiUtils;
-
+import com.zjw.utils.PropertiesUtil;
 import java.io.*;
 import java.text.NumberFormat;
 
@@ -13,19 +13,30 @@ public class Main {
     /**
      * FFmpeg全路径
      */
-    private static final String FFMPEG_PATH = "D:/ffmpeg/bin/ffmpeg.exe";
+    private static final String FFMPEG_PATH ;
     /**
      * 音视频文件的位置
      */
-    private static final String IN_PATH = "F:/631171397";
+    private static final String IN_PATH ;
     /**
      * 输出文件的位置
      */
-    private static final String OUT_PATH = "F:/教程/RabbitMQ/";
+    private static final String OUT_PATH ;
     /**
      * 数字前缀
      */
-    private static final boolean PREFIX_NUM = false;
+    private static final boolean PREFIX_NUM;
+
+    static PropertiesUtil propertiesUtil ;
+
+    static {
+        propertiesUtil = PropertiesUtil.getInstance();
+        FFMPEG_PATH = propertiesUtil.getValue("FFMPEG_PATH");
+        IN_PATH = propertiesUtil.getValue("IN_PATH");
+        OUT_PATH = propertiesUtil.getValue("OUT_PATH");
+        PREFIX_NUM = Boolean.parseBoolean(propertiesUtil.getValue("PREFIX_NUM"));
+        System.out.println(FFMPEG_PATH);
+    }
 
     /**
      * 合并文件计数
@@ -104,7 +115,13 @@ public class Main {
             outPutFile2.renameTo(new File(outParentFilePath+"/"+finalName));
         }
     }
-    // 递归函数
+
+    /**
+     * 递归函数
+     * @param inPath 输入路径
+     * @param outPath 输出路径
+     * @throws Exception 异常
+     */
     public static void getAll(String inPath,String outPath) throws Exception {
         String videoInputPath = "";
         String audioInputPath = "";
@@ -125,7 +142,7 @@ public class Main {
                         String fileJson=br.readLine();
                         br.close();
                         //输出文件路径+文件名
-                        videoOutPath = outPath+getFileName(fileJson);
+                        videoOutPath = outPath+"/"+getFileName(fileJson);
                         System.out.printf("正在合并第%s个视频...\n", ++count);
                         convetor(videoInputPath, audioInputPath, videoOutPath);
                     }
@@ -138,9 +155,10 @@ public class Main {
     }
 
     public static String getFileName(String fileJson){
-        String fileName = "video.mp4";
+        String fileName ;
         if (PREFIX_NUM){
-            fileName = fill(BiBiUtils.getVideoIndex(fileJson),3,3)+"_"+BiBiUtils.getVideoName(fileJson)+".mp4";
+            int min = Integer.parseInt(propertiesUtil.getValue("MINI_DIGITS"));
+            fileName = fill(BiBiUtils.getVideoIndex(fileJson),min, Byte.MAX_VALUE)+"_"+BiBiUtils.getVideoName(fileJson)+".mp4";
         } else {
             fileName = BiBiUtils.getVideoName(fileJson)+".mp4";
         }
