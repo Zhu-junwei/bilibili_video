@@ -1,14 +1,9 @@
 package com.zjw.main;
 
-import com.google.gson.Gson;
-import com.zjw.gson.LinuxBean;
 import com.zjw.utils.BiBiUtils;
 
 import java.io.*;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 
 /**
  * @author 朱俊伟
@@ -18,7 +13,7 @@ public class Main {
     /**
      * FFmpeg全路径
      */
-    private static final String FFMPEG_PATH = "D:/ffmpeg\\bin/ffmpeg.exe";
+    private static final String FFMPEG_PATH = "D:/ffmpeg/bin/ffmpeg.exe";
     /**
      * 音视频文件的位置
      */
@@ -68,6 +63,8 @@ public class Main {
         File outPutFile = new File(videoOutPath);
         String finalName = outPutFile.getName();
         String outParentFilePath = outPutFile.getParentFile().getPath();
+        //当时为啥要做个替换呢？不太记得原因了
+        //可能是在执行command命令的时候，有空格的话执行会失败
         videoOutPath = outParentFilePath+"\\"+finalName.replace(" ","_");
         File outPutFile2 = new File(videoOutPath);
 
