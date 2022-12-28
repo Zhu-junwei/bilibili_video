@@ -1,10 +1,11 @@
 package com.zjw.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author 朱俊伟
@@ -19,7 +20,13 @@ public class PropertiesUtil {
     private PropertiesUtil() {
         try {
             //读取classes下的配置文件
-            this.prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties"));
+            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            this.prop.load(bufferedReader);
+            Set<String> propertyNames = prop.stringPropertyNames();
+            for (String key : propertyNames) {
+                System.out.println(key+ ":" + prop.get(key));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,6 +42,10 @@ public class PropertiesUtil {
 
     public String getValue(String key, String defaultValue){
         return this.prop.getProperty(key, defaultValue);
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }

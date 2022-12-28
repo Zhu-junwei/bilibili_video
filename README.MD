@@ -21,14 +21,18 @@
 
 ### 运行Main.java中的main方法
 
-你可能需要修改main方法中的几个参数
-```java
-    // FFmpeg全路径
-    private static final String FFMPEG_PATH = "D:\\ffmpeg\\bin\\ffmpeg.exe";
-    //音视频文件的位置
-    private static String IN_PATH = "F:\\教程\\54095344";
-    //输出文件的位置
-    private static String OUT_PATH = "F:\\教程\\韩顺平数据结构\\";
+运行前修改config.properties中的参数
+```properties
+# ffmpeg文件的位置
+FFMPEG_PATH = D:/ffmpeg/bin/ffmpeg.exe
+# 下载的音视频位置
+IN_PATH = F:/425540552
+# 合并后文件的路径
+OUT_PATH = F:/SpringBoot教程
+# 合并后的文件名时候加数字前缀
+PREFIX_NUM = true
+# 设置数字前缀的最少位数，设置为3时文件名格式为“001_+文件名”
+MINI_DIGITS = 3
 ```
 
 ## Q&A
