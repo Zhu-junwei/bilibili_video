@@ -1,6 +1,7 @@
 package com.zjw.utils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
@@ -21,7 +22,8 @@ public class PropertiesUtil {
         try {
             //读取classes下的配置文件
             InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            assert inputStream != null;
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             this.prop.load(bufferedReader);
             Set<String> propertyNames = prop.stringPropertyNames();
             for (String key : propertyNames) {
